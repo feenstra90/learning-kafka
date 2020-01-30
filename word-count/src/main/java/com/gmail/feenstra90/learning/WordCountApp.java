@@ -14,14 +14,15 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Starter {
-    private static final Logger logger = Logger.getLogger(Starter.class.getCanonicalName());
+public class WordCountApp {
+    private static final Logger logger = Logger.getLogger(WordCountApp.class.getCanonicalName());
 
     public static void main(String[] args) {
         Properties configuration = getConfiguration();
         StreamsBuilder streamsBuilder = new StreamsBuilder();
 
         // Input: word-count-input, split by space (get individual words), use the word as a key, count by key, output to word-count-output/
+        //noinspection Convert2MethodRef
         streamsBuilder.<String, String>stream("word-count-input")
                 .mapValues(value -> value.toLowerCase())
                 .flatMapValues(value -> Arrays.asList(value.split(" "))) // In the tutorial space is used, regex pattern for whitespace might be 'nicer' to use.
@@ -60,6 +61,6 @@ public class Starter {
 
     private static void printTopologyToLog(final Topology topology) {
         final TopologyDescription topologyDescription = topology.describe();
-        logger.log(Level.CONFIG, topology.describe().toString());
+        logger.log(Level.CONFIG, topologyDescription.toString());
     }
 }
